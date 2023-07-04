@@ -1,5 +1,6 @@
 //Importación de la función router por parte de express
 import {Router} from 'express'
+import verificarAutenticacion from '../middlewares/autenticacion.js'
 //Inicializar la función router
 const router = Router()
 import {
@@ -24,10 +25,9 @@ router.get("/recuperar-password", recuperarPassword);
 router.get("/recuperar-password/:token", comprobarTokenPasword);
 router.post("/nuevo-password/:token", nuevoPassword);
 
-router.get("/perfil", perfil);
-router.put('/veterinario/actualizarpassword',actualizarPassword)
-router.get("/veterinario/:id", detalleVeterinario);
-router.put("/veterinario/:id", actualizarPerfil);
-
+router.get('/perfil',verificarAutenticacion,perfil)
+router.put('/veterinario/actualizarpassword',verificarAutenticacion,actualizarPassword)
+router.get('/veterinario/:id',verificarAutenticacion,detalleVeterinario)
+router.put('/veterinario/:id',verificarAutenticacion,actualizarPerfil)
 //Exportar la variable router
 export default router
