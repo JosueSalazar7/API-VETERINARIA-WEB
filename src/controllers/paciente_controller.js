@@ -2,10 +2,15 @@ import Paciente from "../models/Paciente.js"
 //Se importa mongoose para la visualización de detalles del paciente
 import mongoose from "mongoose"
 
-const listarPacientes = async (req,res)=>{
-    const pacientes = await Paciente.findAll({estado:true}).where('veterinario').equals(req.veterinarioBDD).select("-salida -createdAt -updatedAt -__v").populate('veterinario','_id nombre apellido')
-    res.status(200).json(pacientes)
-}
+const listarPacientes = async (req, res) => {
+    try {
+      const pacientes = await Paciente.find();
+      res.status(200).json(pacientes);
+    } catch (error) {
+      console.error("Error al listar los pacientes:", error);
+      res.status(500).json({ error: "Error al listar los pacientes" });
+    }
+  };
 //Detalles del paciente
 const detallePaciente = async(req,res)=>{
     const {id} = req.params

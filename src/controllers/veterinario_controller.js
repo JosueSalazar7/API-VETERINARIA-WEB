@@ -56,9 +56,15 @@ const confirmEmail = async (req,res)=>{
     await veterinarioBDD.save()
     res.status(200).json({msg:"Token confirmado, ya puedes iniciar sesión"}) 
 }
-const listarVeterinarios = (req,res)=>{
-    res.status(200).json({res:'lista de veterinarios registrados'})
-}
+const listarVeterinarios = async (req, res) => {
+    try {
+      const veterinarios = await Veterinario.find();
+      res.status(200).json(veterinarios);
+    } catch (error) {
+      console.error("Error al listar los veterinarios:", error);
+      res.status(500).json({ error: "Error al listar los veterinarios" });
+    }
+  };
 const detalleVeterinario = async(req,res)=>{
     //Obtener datos del request params
     const {id} = req.params
