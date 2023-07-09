@@ -2,15 +2,10 @@ import Paciente from "../models/Paciente.js"
 //Se importa mongoose para la visualización de detalles del paciente
 import mongoose from "mongoose"
 
-const listarPacientes = async (req, res) => {
-    try {
-      const pacientes = await Paciente.find();
-      res.status(200).json(pacientes);
-    } catch (error) {
-      console.error("Error al listar los pacientes:", error);
-      res.status(500).json({ error: "Error al listar los pacientes" });
-    }
-  };
+const listarPacientes = async (req,res)=>{
+    const pacientes = await Paciente.find({estado:true}).where('veterinario').equals(req.veterinarioBDD).select("-salida -createdAt -updatedAt -__v").populate('veterinario','_id nombre apellido')
+    res.status(200).json(pacientes)
+}
 //Detalles del paciente
 const detallePaciente = async(req,res)=>{
     const {id} = req.params
@@ -22,7 +17,7 @@ const detallePaciente = async(req,res)=>{
 const registrarPaciente = async(req,res)=>{
     if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
     const nuevoPaciente = new Paciente(req.body)
-    nuevoPaciente.veterinario=req.body.id
+    nuevoPaciente.veterinario=req.veterinarioBDD._id
     await nuevoPaciente.save()
     res.status(200).json({msg:"Registro exitoso del paciente"})
 }

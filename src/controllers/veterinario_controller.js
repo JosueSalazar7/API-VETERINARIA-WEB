@@ -57,13 +57,27 @@ const confirmEmail = async (req,res)=>{
     res.status(200).json({msg:"Token confirmado, ya puedes iniciar sesión"}) 
 }
 const listarVeterinarios = async (req, res) => {
+
     try {
+
+      // Acceder a la base de datos y obtener la lista de veterinarios registrados
+
       const veterinarios = await Veterinario.find();
+
+ 
+
+      // Enviar la lista de veterinarios como respuesta
+
       res.status(200).json(veterinarios);
+
     } catch (error) {
-      console.error("Error al listar los veterinarios:", error);
-      res.status(500).json({ error: "Error al listar los veterinarios" });
+
+      // En caso de error, enviar una respuesta con el mensaje de error
+
+      res.status(500).json({ error: 'Error al obtener la lista de veterinarios' });
+
     }
+
   };
 const detalleVeterinario = async(req,res)=>{
     //Obtener datos del request params
